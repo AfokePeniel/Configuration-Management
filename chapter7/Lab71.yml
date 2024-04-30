@@ -1,0 +1,57 @@
+---
+- name: Install packages et all
+  hosts: ansible2
+  ignore_errors: true
+  vars_files: vars/pckgs
+  tasks:
+  - name: Install packages
+    package:
+      name: "{{ item.name }}"
+      state: latest
+    loop: "{{ packages }}"
+    when: (ansible_facts['distribution_version'] >= "8.0" and (ansible_facts['distribution'] == "CentOS")) or (ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution'] != "Fedora")
+  - name: Report failure
+    fail:
+      msg: " Host {{ ansible_facts['hostname'] }} does not meet the minimal requirements "
+    when: not (ansible_facts['distribution_version'] == "8.0" and (ansible_facts['distribution'] in ("CentOS", "RedHat")) and ansible_facts['distribution'] != "Fedora")
+  - name: enable and start httpd service
+    service:
+      name: "{{ item.name }}"
+      state: started
+      enabled: true
+    loop: "{{ packages }}"
+    when: item.name == "httpd"
+  - name: Enable firewall
+    service:
+      name: firewalld
+      state: started
+      enabled: true
+  - name: open firewall
+    firewalld:
+      service: http
+      permanent: true
+      state: enabled
+      immediate: yes
+  - name: copy file
+    copy:
+      src: /tmp/index.html
+      dest: /var/www/html
+    register: copy_result
+    notify: 
+      - restart_web
+  - name: Print error message on copy failure
+    debug:
+      msg: "Failed to copy file"
+    when: not copy_result.changed
+  handlers: 
+    - name: restart_web
+      service:
+        name: "{{ item.name }}"
+        state: restarted
+      loop: "{{ packages }}"
+      when: item.name == "httpd"
+    
+
+
+  
+

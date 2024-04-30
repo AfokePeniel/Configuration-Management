@@ -1,0 +1,10 @@
+---
+- name: test register module
+  hosts: ansible1
+  tasks:
+  - name: using shell module to view /etc/passwd
+    shell: cat /etc/passwd
+    register: passwd_contents
+  - name: display the stored content
+    debug:
+      var: "passwd_contents"

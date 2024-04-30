@@ -1,0 +1,18 @@
+---
+- name: stat module test
+  hosts: ansible1
+  tasks:
+  - name: create a an empty file
+    command: touch /tmp/statfile
+  - name: check stat
+    stat:
+      path: /tmp/statfile
+    register: st
+  - name: show current values
+    debug:
+      msg: current value of the st variable is "{{ st }}"
+  - name: fail mode
+    fail:
+      msg: "unexpected file mode detected, the module should be set to 0640"
+    when: st.stat.mode != "0640" 
+

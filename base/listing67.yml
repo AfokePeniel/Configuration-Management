@@ -1,0 +1,8 @@
+---
+- name: Learning Ansible facts
+  hosts: ansible2
+  tasks:
+  - name: Get Alias of hosts
+    debug:
+      msg: >
+          The alias of the host is {{ ansible_facts.default_ipv4.alias }} 

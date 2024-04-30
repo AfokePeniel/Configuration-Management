@@ -1,0 +1,32 @@
+---
+- name: Copy facts
+  hosts: file
+  vars: 
+    facts_file: pack_serv.fact
+    remote_dir: /etc/ansible/facts.d 
+  tasks:
+  - name: create the directory
+    file:
+      state: directory
+      recurse: yes
+      path: "{{ remote_dir }}"
+  - name: copy facts
+    copy:
+      src: "{{ facts_file }}"
+      dest: "{{ remote_dir }}"
+
+- name: Copy facts
+  hosts: lamp
+  vars:      
+    facts_file: pack_serv.fact
+    remote_dir: /etc/ansible/facts.d
+  tasks:
+  - name: create the directory
+    file:
+      state: directory
+      recurse: yes
+      path: "{{ remote_dir }}"
+  - name: copy facts
+    copy:
+      src: "{{ facts_file }}"
+      dest: "{{ remote_dir }}"

@@ -1,0 +1,9 @@
+---
+- name: conditional test
+  hosts: all
+  tasks:
+  - name: install vsftpd if sufficent memory is available
+    package:
+      name: vsftpd
+      state: latest
+    when: ansible_facts['memory_mb']['real']['free'] > 50
