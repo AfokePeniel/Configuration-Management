@@ -1,5 +1,4 @@
-# RHCE-8-EX294-
-This is a documentation of my studying for RedHat Certified Engineer certification RHCE 8 (EX294)
+# Configuration Management with Ansible
 
 Creating various Ansible playbook scripts for administrative tasks from Master node to client node servers. 
 
