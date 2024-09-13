@@ -1,19 +1,11 @@
 # Configuration Management with Ansible
 
-Creating various Ansible playbook scripts for administrative tasks from Master node to client node servers. 
+Leveraging Ansible for streamlined configuration management and automation of administrative tasks across multiple servers. This project demonstrates the use of Ansible playbooks to efficiently manage and configure systems from a central control node.
 
-**Core System Administration**
-- System installation and configuration
-- Package management
-- User and group management
-- File system management
-- Network configuration
-- Security
-- Troubleshooting
-
-**Automation with Ansible**
-- Ansible architecture and components
-- Creating and managing inventories
-- Writing playbooks and modules
-- Using Ansible roles and collections
-- Automation of system administration tasks
+- Automated system configuration and application deployment
+- Writing and executing Ansible playbooks
+- Managing inventory and host groups
+- Creating and using roles for reusable configurations
+- Handling variables and templates
+- Implementing idempotent tasks
+- Ansible Vault for secure data management
