@@ -1,0 +1,22 @@
+---
+- name: Install start and enable httpd
+  hosts: all
+  tasks:
+  - name: Install httpd
+    yum:
+      name: httpd
+      state: present
+  - name: Start and enable httpd
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+- name: Test httpd connectivity
+  hosts: localhost
+  tasks:
+  - name: test httpd access
+    uri:
+      url: https://ansible1
+
+
+

@@ -1,0 +1,11 @@
+---
+- name: install packages using loop
+  hosts: ansible1
+  vars_files: vars/packages
+  tasks: 
+  - name: Install packages
+    yum:
+      name: "{{ item.name }}"
+      state: "{{ item.state }}"
+    loop: "{{ packages }}"
+

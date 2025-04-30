@@ -1,0 +1,16 @@
+---
+- name: demonstrating failed_when
+  hosts: all
+  ignore_errors: true
+  tasks:
+  - name: run a script
+    command: echo hello world
+    register: command_result
+  - name: report a failure
+    fail:
+      msg: The previous task has failed
+    when: "'world' in command_result.stdout"
+  - name: see if we get here
+    debug:
+      msg: second task executed
+

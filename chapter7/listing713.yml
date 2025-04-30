@@ -1,0 +1,14 @@
+---
+- name: using multiple conditions
+  hosts: all
+  tasks:
+  - name: install package
+    package:
+      name: httpd
+      state: removed
+    when: >
+      ( ansible_facts['distribution'] == "RedHat" and ansible_facts['memfree_mb'] < 512 )
+      or
+      ( ansible_facts['distribution'] == "RedHat" and ansible_facts['memfree_mb'] < 256 )
+
+

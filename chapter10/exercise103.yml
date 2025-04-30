@@ -1,0 +1,9 @@
+---
+- name: Install vsftpd on ansible2
+  hosts: ansible2
+  vars_files: exercise103-vars.yml
+  tasks:
+  - name: Install and enable bsftpd
+    import_tasks: exercise103-ftp.yml
+  - name: copy README file
+    import_tasks: exercise103-copy.yml

@@ -1,0 +1,13 @@
+---
+- name: Install Nginx and Postgresql roles
+  hosts: ansible1
+  roles:
+  - geerlingguy.nginx  
+  - geerlingguy.postgresql
+  tasks:
+  - name: Remove unwanted packages
+    yum:
+      name:
+        - httpd
+        - mysql-server
+      state: absent

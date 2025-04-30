@@ -1,0 +1,44 @@
+---
+- name: Configure SELinux settings using RHEL SELinux System Role
+  hosts: ansible1
+  become: yes
+  roles:
+    - role: rhel-system-roles.selinux
+  tasks:
+    # 1. Set the SELinux boolean for automatic relabeling via cron
+    - name: Set SELinux boolean to allow relabeling automation
+      seboolean:
+        name: cron_can_relabel
+        state: yes
+        persistent: yes
+
+    # 2. Create /var/ftp/uploads directory with permissions and context label
+    - name: Create /var/ftp/uploads directory
+      file:
+        path: /var/ftp/uploads
+        state: directory
+        mode: '0777'
+
+    - name: Set SELinux context for /var/ftp/uploads
+      sefcontext:
+        target: /var/ftp/uploads
+        setype: public_content_rw_t
+        state: present
+
+    - name: Apply SELinux context changes
+      shell: restorecon -v /var/ftp/uploads
+
+    # 3. Allow web servers to use port 82 instead of port 80
+    - name: Allow web servers to use port 82
+      seport:
+        ports: "82"
+        proto: tcp
+        setype: http_port_t
+        state: present
+
+    # 4. Ensure SELinux is in enforcing state
+    - name: Ensure SELinux is in enforcing mode
+      command:
+        cmd: setenforce 1
+        creates: /etc/selinux/config
+

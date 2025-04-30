@@ -1,0 +1,43 @@
+---
+- name: Enable Web Server
+  hosts: ansible1
+  tasks:
+  - name: Install stuff
+    yum:
+      name: 
+      - httpd
+      - firewalld
+  - name: Create a welcome page
+    copy:
+      content: "welcome to the webserver\n"
+      dest: /var/www/html/index.html
+  - name: Enable webserver
+    service:
+      name: httpd
+      state: started
+      enabled: true
+  - name: Enable firewall
+    service:
+      name: firewalld
+      state: started
+      enabled: true
+  - name: Open service in firewall
+    firewalld:
+      service: http
+      permanent: true
+      state: enabled
+      immediate: true
+
+- name: test webserver access
+  hosts: localhost
+  become: no
+  tasks:
+  - name: test webserver access
+    uri:
+      url: http://ansible1
+      return_content: yes
+      status_code: 200
+
+
+
+

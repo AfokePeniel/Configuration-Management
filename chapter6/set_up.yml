@@ -1,0 +1,42 @@
+---
+- name: set up service environment
+  hosts: all
+  vars_files:
+    - allvars.yml
+  tasks:
+  - name: Install packages
+    yum:
+      name: 
+      - "{{ ansible_facts['ansible_local']['pack_serv']['packages']['ftp_package'] }}"
+      - "{{ ansible_facts['ansible_local']['pack_serv']['packages']['web_package'] }}"
+      state: latest
+  - name: Enable ftp service
+    service:
+      name: "{{ ansible_facts['ansible_local']['pack_serv']['services']['ftp_service'] }}"
+      state: started
+      enabled: yes
+  - name: Enable web service
+    service:
+      name: "{{ ansible_facts['ansible_local']['pack_serv']['services']['web_service'] }}"
+      state: started
+      enabled: yes
+  - name: Open Firewalld
+    firewalld:
+      service: http
+      permanent: true
+      state: enabled
+      immediate: true
+  - name: set up file directory
+    file:
+      state: directory
+      path: " {{ ftp_root }} "
+  - name: set up webserver
+    file:
+      state: touch
+      path: "{{ web_root }}"
+  - name: Create webpage
+    copy:
+      content: "Welcome to the Ansible Web Server\n"
+      dest: "{{ web_root }}/index.html"
+
+

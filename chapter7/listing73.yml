@@ -1,0 +1,12 @@
+---
+- name: Creating users using multivalued variables in vars_files
+  hosts: ansible1
+  vars_files: vars/users-list
+  tasks:
+  - name: create users
+    user:
+      name: "{{ item.username }}"
+      state: present
+      groups: "{{ item.groups }}"
+      shell: "{{ item.shell }}"
+    loop: "{{ users }}"    

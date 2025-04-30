@@ -1,0 +1,16 @@
+- name: install Package
+  yum:
+    name: "{{ packagename }}"
+    state: latest
+
+- name: enable and start {{ servicename }}
+  service:
+    name: "{{ servicename }}"
+    state: started
+    enabled: true
+
+- name: open the service in the firewall
+  firewalld:
+    service: "{{ firewalld_servicename }}"
+    permanent: yes
+    state: enabled

@@ -1,0 +1,18 @@
+users:
+  - username: linda
+    homedir: /home/linda
+    shell: /bin/bash
+    groups: wheel
+  - username: lisa
+    homedir: /home/lisa
+    shell: /bin/bash
+    groups: users
+  - username: ana
+    homedir: /home/ana
+    shell: /bin/bash
+    groups: users
+
+
+
+
+

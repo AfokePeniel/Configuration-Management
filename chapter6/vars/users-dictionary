@@ -1,0 +1,6 @@
+users:
+  linda:
+    username: linda
+    homedir: /home/linda
+    shell: /bin/bash
+
