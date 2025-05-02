@@ -1,0 +1,20 @@
+users:
+  - username: sharon
+    groups: admin
+    user_password: "{{ 'password' | password_hash('sha512', 'mysalt') }}"
+  
+  - username: blair
+    groups: admin
+    user_password: "{{ 'password' | password_hash('sha512', 'mysalt') }}"
+  
+  - username: ashley
+    groups: students
+    user_password: "{{ 'password' | password_hash('sha512', 'mysalt') }}"
+  
+  - username: ahmed
+    groups: students
+    user_password: "{{ 'password' | password_hash('sha512', 'mysalt') }}"
+
+usergroups:
+  - groupname: admin
+  - groupname: students

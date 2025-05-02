@@ -1,0 +1,12 @@
+users:
+  - username: zenia
+    groups: admins
+
+  - username: marlet
+    groups: admins
+
+  - username: victoria
+    groups: students
+
+  - username: emma
+    groups: students

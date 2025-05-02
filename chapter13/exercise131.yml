@@ -1,0 +1,24 @@
+---
+- name: Create user accounts
+  hosts: ansible1
+  vars_files:
+    - host_vars/ansible1
+  tasks:
+    - name: Create groups
+      group:
+        name: "{{ item.groups }}"
+        state: present
+      loop: "{{ users }}"
+
+    - name: create users and add to group
+      user:
+        name: "{{ item.username }}"
+        groups: "{{ item.groups }}"
+      loop: "{{ users }}"
+
+    - name: all group members in sudo
+      template:
+        src: exercise131.j2
+        dest: /etc/sudoers.d/sudogroups
+        validate: 'visudo -cf %s'
+        mode: 0440

@@ -1,0 +1,68 @@
+---
+- name: Create and Configure Users with SSH keys
+  hosts: ansible2
+  vars_files:
+    - vars/user2
+    - vars/group2
+  tasks:
+    - name: Create groups
+      group:
+        name: "{{ item.groupname }}"
+      loop: "{{ usergroups }}"
+
+    - name: Create and add users to group, Generate SSH Keys
+      user:
+        name: "{{ item.username }}"
+        create_home: yes
+        groups: "{{ item.groups }}"
+        append: yes
+        generate_ssh_key: yes
+        ssh_key_bits: 2048
+        ssh_key_file: ".ssh/id_rsa"
+      loop: "{{ users }}"
+
+    - name: Create a directory to store the file
+      file:
+        name: "{{ item.username }}"
+        state: directory
+      loop: "{{ users }}"
+      become: true
+
+    - name: Copy the local user ssh key to temporary location
+      shell: 'cat /home/{{ item.username }}/.ssh/id_rsa.pub > {{ item.username }}/id_rsa.pub'
+      loop: "{{ users }}"
+      become: true
+
+    - name: Verify that file exists
+      command: "ls -l {{ item.username }}"
+      loop: "{{ users }}"
+      become: true
+
+    - name: Read the SSH public key content
+      shell: "cat {{ item.username }}/id_rsa.pub"
+      register: ssh_key_content
+      loop: "{{ users }}"
+      become: true
+
+    - name: Add the SSH public key to authorized_keys
+      authorized_key:
+        user: "{{ item.0.username }}"
+        key: "{{ item.1.stdout }}"
+        state: present
+      loop: "{{ users | zip(ssh_key_content.results) | list }}"
+      become: true
+
+    - name: Clean up temporary directories
+      file:
+        path: "{{ item.username }}"
+        state: absent
+      loop: "{{ users }}"
+      become: true
+
+    - name: Ensure .ssh directory exists for the user
+      file:
+        path: "/home/{{ item.username }}/.ssh"
+        state: directory
+        mode: '0700'
+      loop: "{{ users }}"
+      become: true

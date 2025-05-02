@@ -1,0 +1,16 @@
+- name: create groups
+  group:
+    name: "{{ item.groupname }}"
+  loop: "{{ usergroups }}"
+    
+- name: create users
+  user:
+    name: "{{ item.username }}"
+    groups: "{{ item.groups }}"
+    create_home: yes
+    append: yes
+    generate_ssh_key: yes
+    ssh_key_comment: "{{ item.username }}@{{ ansible_fqdn }}"
+    password: "{{ item.user_password }}"
+  loop: "{{ users }}"
+

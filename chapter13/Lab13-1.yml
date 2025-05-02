@@ -1,0 +1,26 @@
+---
+- name: Create Users, set password, give sudo privileges
+  hosts: ansible2
+  vars_files:
+    - vars/Q1-groups
+    - vars/Q1-users
+  
+  tasks:
+    - name: Create Groups
+      group:
+        name: "{{ item.groupname }}"
+      loop: "{{ usergroups }}"
+
+    - name: Create Users
+      user:
+        name: "{{ item.username }}"
+        groups: "{{ item.groups }}"
+        create_home: yes
+        append: yes
+        password: "{{ item.user_password }}"
+      loop: "{{ users }}"
+
+    - name: Give sudo access
+      copy:
+        content: '%profs ALL=(ALL:ALL) NOPASSWD: ALL'
+        dest: /etc/sudoers.d/profs
